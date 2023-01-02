@@ -32,7 +32,12 @@ class HomeViewController: UIViewController  {
         self.newsTable.delegate = self;
         self.newsTable.dataSource = self;
 
+        self.newsTable.keyboardDismissMode = .onDrag
 
+        
+        
+        self.searchBar.delegate = self
+        self.searchBar.endEditing(true)
         //MARK: indicator
         indicator.center = self.view.center
         self.view.addSubview(indicator)
@@ -174,7 +179,6 @@ extension HomeViewController : UISearchBarDelegate{
             }
         }
         else{
-            print(searchText);
         self.homeVM.getSearch(query: searchText) { articles in
             self.articles = articles;
             self.newsTable.reloadData();
