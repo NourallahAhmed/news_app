@@ -48,6 +48,7 @@ class ViewController: UIViewController {
         
         articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
         self.sourceName.text = article?.source.name
+        self.time.text = article?.publishedAt
 
     }
 

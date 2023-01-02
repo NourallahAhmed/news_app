@@ -109,7 +109,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         
         cell.auther.text = self.articles[indexPath.row].author
         cell.desc.text = self.articles[indexPath.row].articleDescription
-        cell.time.text = self.articles[indexPath.row].source.name
+        cell.time.text = self.articles[indexPath.row].publishedAt
 
 
 
