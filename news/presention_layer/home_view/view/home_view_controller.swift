@@ -7,12 +7,18 @@
 
 
 import UIKit
-import Kingfisher
+import NVActivityIndicatorView
 
-class HomeViewController: UIViewController{
+class HomeViewController: UIViewController  {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var newsTable: UITableView!
+    
+    
+    let indicator = NVActivityIndicatorView(frame: CGRect(x: 50, y: 10, width: 100, height: 100),
+                                        
+        type: NVActivityIndicatorType.ballTrianglePath  ,
+        color: UIColor.blue)
     
     
     private var homeVM = HomeViewModel() ///todo: dependency injection
@@ -26,14 +32,20 @@ class HomeViewController: UIViewController{
         self.newsTable.delegate = self;
         self.newsTable.dataSource = self;
 
-        
+
+        //MARK: indicator
+        indicator.center = self.view.center
+        self.view.addSubview(indicator)
+
+        indicator.startAnimating()
+
         //MARK: send api request
         homeVM.getNews { articles in
             self.articles = articles;
             self.newsTable.separatorStyle = .none
-
-
-            self.newsTable.reloadData();
+            self.newsTable.rowHeight = UITableView.automaticDimension
+            self.indicator.stopAnimating()
+            self.newsTable.reloadData()
             
         }
       
@@ -51,7 +63,7 @@ class HomeViewController: UIViewController{
     */
 }
 
-extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
+extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
    
     
     /// get the number from viewmodel
@@ -68,9 +80,9 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomNewsTableViewCell
         
-        cell.tiltle.text = self.articles[indexPath.row].title
+        cell.tiltle.text = self.articles[indexPath.row].author
         
-        cell.auther.text = self.articles[indexPath.row].author
+        cell.auther.text = self.articles[indexPath.row].title
         cell.desc.text = self.articles[indexPath.row].articleDescription
         cell.time.text = self.articles[indexPath.row].source.name
 
@@ -81,36 +93,50 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource {
         
         
         let imageUrl = URL(string: self.articles[indexPath.row].urlToImage ?? "")
-        cell.articleImage.kf.setImage(with: imageUrl,
-                                    placeholder: UIImage(named: "default") ,
-                                    options: nil,
-                                    progressBlock: nil)
-    
+        
+        
+        
+        cell.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
         
         return cell
     }
+    
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        
-        
-        var heightExpected = calculateHeight(inString: self.articles[indexPath.row].articleDescription ?? ""  ) + calculateHeight(inString: self.articles[indexPath.row].title ?? ""  )  + calculateHeight(inString: self.articles[indexPath.row].author ?? ""  );
-        
-        return heightExpected;
-        
+
+//
+//        let heightExpected =
+//            calculateHeight(inString: self.articles[indexPath.row].articleDescription ?? ""  ) +
+//            calculateHeight(inString: self.articles[indexPath.row].title ?? ""  )  +
+//            calculateHeight(inString: self.articles[indexPath.row].author ?? ""  ) +
+//            calculateHeight(inString: self.articles[indexPath.row].source.name  );
+        return UITableView.automaticDimension;
+
 
     }
     
-    func calculateHeight(inString:String) -> CGFloat {
-         let messageString = inString
-        let attributes : [NSAttributedString.Key  : Any] = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15.0)]
-
-         let attributedString : NSAttributedString = NSAttributedString(string: messageString, attributes: attributes)
-
-         let rect : CGRect = attributedString.boundingRect(with: CGSize(width: 222.0, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
-
-          let requredSize:CGRect = rect
-          return requredSize.height
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailsScreen = self.storyboard?.instantiateViewController(identifier: "detailsScreen") as! ViewController
+        detailsScreen.article = self.articles[indexPath.row]
+        self.navigationController?.pushViewController(detailsScreen, animated: false)
+     
     }
+    
+    
+//    func calculateHeight(inString:String) -> CGFloat {
+//         let messageString = inString
+//        let attributes : [NSAttributedString.Key  : Any] = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15.0)]
+//
+//         let attributedString : NSAttributedString = NSAttributedString(string: messageString, attributes: attributes)
+//
+//         let rect : CGRect = attributedString.boundingRect(with: CGSize(width: 222.0, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
+//
+//          let requredSize:CGRect = rect
+//          return requredSize.height
+//    }
     
     
 }
