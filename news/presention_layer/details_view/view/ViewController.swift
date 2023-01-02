@@ -16,6 +16,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var desc: UILabel!
     @IBOutlet weak var articleTitle: UILabel!
     @IBOutlet weak var articleImage: UIImageView!
+    
+    
+    @IBOutlet weak var sourceName: UILabel!
+    @IBOutlet weak var time: UILabel!
+    
+    @IBAction func toWebSite(_ sender: Any) {
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.

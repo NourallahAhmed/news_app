@@ -69,9 +69,12 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
     /// get the number from viewmodel
   
 
-    
+ 
 
-    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // this will turn on `masksToBounds` just before showing the cell
+        cell.contentView.layer.masksToBounds = true
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.articles.count;
     }
@@ -80,9 +83,26 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomNewsTableViewCell
         
-        cell.tiltle.text = self.articles[indexPath.row].author
         
-        cell.auther.text = self.articles[indexPath.row].title
+        
+        
+        cell.backgroundColor = .clear // very important
+        cell.layer.masksToBounds = true
+        cell.layer.shadowOpacity = 0.23
+        cell.layer.shadowRadius = 4
+        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
+        cell.layer.shadowColor = UIColor.black.cgColor
+
+        // add corner radius on `contentView`
+        cell.contentView.backgroundColor = .white
+        cell.contentView.layer.cornerRadius = 10
+        
+        
+        
+        
+        cell.articlTitle.text = self.articles[indexPath.row].title
+        
+        cell.auther.text = self.articles[indexPath.row].author
         cell.desc.text = self.articles[indexPath.row].articleDescription
         cell.time.text = self.articles[indexPath.row].source.name
 
@@ -97,6 +117,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         
         
         cell.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
+
         
         return cell
     }
