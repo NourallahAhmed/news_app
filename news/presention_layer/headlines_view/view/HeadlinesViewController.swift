@@ -33,12 +33,12 @@ class HeadlinesViewController: UIViewController {
 
         
         
-        //MARK: setting 1 items in 1 row with zero space
+        //MARK: setting 1 item in 1 row
         
         layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width/1, height:  UIScreen.main.bounds.height/4)
         layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 10
         headlinesCollectionView.collectionViewLayout = layout
         
         
@@ -88,6 +88,16 @@ extension HeadlinesViewController : UICollectionViewDelegate , UICollectionViewD
         cell.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
 
         
+        cell.backgroundColor = .clear
+        cell.layer.masksToBounds = true
+        cell.layer.shadowOpacity = 0.23
+        cell.layer.shadowRadius = 4
+        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
+        cell.layer.shadowColor = UIColor.black.cgColor
+
+        // add corner radius on `contentView`
+        cell.contentView.backgroundColor = .white
+        cell.contentView.layer.cornerRadius = 10
         
         
         return cell
