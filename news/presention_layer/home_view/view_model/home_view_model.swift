@@ -17,7 +17,7 @@ class HomeViewModel{
     private let monitor = NWPathMonitor()
     var newsArticles = Array<Article>();
     
-    func getNews(complition: @escaping (([Article]) -> Void )) {
+    func getNews(complition: @escaping (([Article] , _ isConnected : Bool ) -> Void )) {
         monitor.pathUpdateHandler = { [weak self] pathUpdateHandler  in
         if pathUpdateHandler.status == .satisfied {
         DispatchQueue.global().async {
@@ -25,16 +25,15 @@ class HomeViewModel{
                 DispatchQueue.main.async{
                     self?.newsArticles = newsRequest?.articles ?? [];
                     
-                    complition(newsRequest?.articles ?? Array<Article>());
+                    complition(newsRequest?.articles ?? Array<Article>() , true);
                     }
                 }
             }
         }
         else{
                 DispatchQueue.main.async {
-//                      self?.homeView.checkNetwork()
-//                      self?.homeView.stopIndicator()
-                    
+  
+                    complition(Array<Article>() , false);
                 }
             }
         }//monitor
@@ -45,7 +44,7 @@ class HomeViewModel{
     
     
     
-    func getSearch(query : String , complition: @escaping (([Article]) -> Void )) {
+    func getSearch(query : String , complition: @escaping (([Article] , _ isConnected : Bool) -> Void )) {
         
         
         monitor.pathUpdateHandler = { [weak self] pathUpdateHandler  in
@@ -54,15 +53,15 @@ class HomeViewModel{
                 self?.homeUseCase.getSearch(query: query) { newsRequest in
                     self?.newsArticles = newsRequest?.articles ?? [];
 
-                    complition(newsRequest?.articles ?? Array<Article>());
+                    complition(newsRequest?.articles ?? Array<Article>(),true);
                 }
                 
                 }
             }
             else{
                     DispatchQueue.main.async {
-    //                      self?.homeView.checkNetwork()
-    //                      self?.homeView.stopIndicator()
+                        complition(Array<Article>() , false);
+
                         
                     }
                 }

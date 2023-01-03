@@ -67,13 +67,15 @@ class HomeViewController: UIViewController  {
         indicator.startAnimating()
 
         //MARK: send api request
-        homeVM.getNews { _ in
-            self.newsTable.separatorStyle = .none
-            self.newsTable.rowHeight = UITableView.automaticDimension
-            self.indicator.stopAnimating()
-            self.newsTable.reloadData()
+        
+        
+        homeVM.getNews { articles , isConnected in
+            
+            self.handleGetNewsResult(articles: articles , isConnected: isConnected)
+
             
         }
+       
       
     }
     
@@ -162,24 +164,25 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
             
     
     
-
+//MARK: SearchBar
 extension HomeViewController : UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchText.isEmpty){
-            self.homeVM.getNews{ articles in
-                self.newsTable.reloadData();
+            self.homeVM.getNews{ articles ,isConnected  in
+                self.handleGetNewsResult(articles: articles , isConnected: isConnected)
+
             }
         }
         else{
-            self.homeVM.getSearch(query: searchText) { articles in
-                self.newsTable.reloadData();
+            self.homeVM.getSearch(query: searchText) { articles , isConnected in
+                self.handleSearchResult(articles: articles , isConnected: isConnected)
             }
         }
      
     }
 }
 
-
+    //MARK: CollectionView
 extension HomeViewController : UICollectionViewDataSource , UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.suggestionTopics.count
@@ -195,11 +198,81 @@ extension HomeViewController : UICollectionViewDataSource , UICollectionViewDele
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
-        self.homeVM.getSearch(query: self.suggestionTopics[indexPath.row]) { _ in
+        self.homeVM.getSearch(query: self.suggestionTopics[indexPath.row]) { articles , isConnected in
+            self.handleSearchResult(articles: articles , isConnected: isConnected)
+        }
+           
+    }
+}
+
+
+//MARK: Helper Functions
+extension HomeViewController {
+    func checkNetwork () {
+        
+        let imageViewBackground = UIImageView()
+        imageViewBackground.image = UIImage(named: "offline")
+        imageViewBackground.contentMode = UIView.ContentMode.scaleAspectFit
+        self.newsTable.backgroundView = imageViewBackground
+        self.newsTable.reloadData()
+        self.showAlert()
+
+       }
+    
+    
+    func noData () {
+        
+        let imageViewBackground = UIImageView()
+        imageViewBackground.image = UIImage(named: "nodata")
+        imageViewBackground.contentMode = UIView.ContentMode.scaleAspectFit
+        self.newsTable.backgroundView = imageViewBackground
+        self.newsTable.reloadData()
+
+       }
+    func showAlert(){
+        DispatchQueue.main.async {
+            let alert : UIAlertController = UIAlertController(title: "ERROR", message: "Please check your internet connection", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: nil))
+            self.present(alert , animated: true , completion: nil)
             
-            self.newsTable.reloadData()
+        }
+        
+    }
+    
+    func handleSearchResult(articles : Array<Article> , isConnected : Bool){
+        if(isConnected == true){
+            if(articles.isEmpty){
+                self.noData()
+            }
+            else{
+                self.newsTable.scrollToRow(at: IndexPath(row: 0, section: 0) , at: .top , animated: true)
+                self.newsTable.reloadData();
+            }
+        }else{
+            self.checkNetwork()
         }
     }
     
     
+    func handleGetNewsResult(articles : Array<Article> , isConnected : Bool){
+        if (isConnected == true ){
+            
+            if ( articles.isEmpty){
+                self.noData()
+            }
+            else{
+                self.newsTable.separatorStyle = .none
+                self.newsTable.rowHeight = UITableView.automaticDimension
+                self.indicator.stopAnimating()
+                self.newsTable.reloadData()
+            }
+            
+        }
+        else{
+            self.indicator.stopAnimating()
+
+            self.checkNetwork()
+        }
+    }
+
 }
