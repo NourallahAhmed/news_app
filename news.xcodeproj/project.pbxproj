@@ -13,6 +13,7 @@
 		9BBFD2B4296456A200124FFC /* headlines_view_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFD2B3296456A200124FFC /* headlines_view_model.swift */; };
 		9BBFD2B6296456D500124FFC /* headlines_usecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFD2B5296456D500124FFC /* headlines_usecase.swift */; };
 		9BBFD2B82964781E00124FFC /* WebKitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFD2B72964781D00124FFC /* WebKitViewController.swift */; };
+		9BBFD2BA2964A7BC00124FFC /* CustomButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFD2B92964A7BC00124FFC /* CustomButtonCell.swift */; };
 		9BBFE456296206DC003FDB10 /* network_client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFE455296206DC003FDB10 /* network_client.swift */; };
 		9BBFE45829621011003FDB10 /* base_repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFE45729621011003FDB10 /* base_repository.swift */; };
 		9BBFE45A2962107B003FDB10 /* repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBFE4592962107A003FDB10 /* repository.swift */; };
@@ -68,6 +69,7 @@
 		9BBFD2B3296456A200124FFC /* headlines_view_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headlines_view_model.swift; sourceTree = "<group>"; };
 		9BBFD2B5296456D500124FFC /* headlines_usecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headlines_usecase.swift; sourceTree = "<group>"; };
 		9BBFD2B72964781D00124FFC /* WebKitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WebKitViewController.swift; path = news/presention_layer/headlines_view/view/WebKitViewController.swift; sourceTree = SOURCE_ROOT; };
+		9BBFD2B92964A7BC00124FFC /* CustomButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonCell.swift; sourceTree = "<group>"; };
 		9BBFE455296206DC003FDB10 /* network_client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = network_client.swift; sourceTree = "<group>"; };
 		9BBFE45729621011003FDB10 /* base_repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = base_repository.swift; sourceTree = "<group>"; };
 		9BBFE4592962107A003FDB10 /* repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = repository.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			children = (
 				9BBFE463296227D3003FDB10 /* home_view_controller.swift */,
 				9BBFE46A296236F9003FDB10 /* CustomNewsCellTableViewCell.swift */,
+				9BBFD2B92964A7BC00124FFC /* CustomButtonCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BBFD2BA2964A7BC00124FFC /* CustomButtonCell.swift in Sources */,
 				9BD9D6932961E9F400A6F948 /* remote_data_source.swift in Sources */,
 				9BBFE45829621011003FDB10 /* base_repository.swift in Sources */,
 				9BBFD2B82964781E00124FFC /* WebKitViewController.swift in Sources */,

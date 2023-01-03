@@ -14,30 +14,52 @@ class HomeViewController: UIViewController  {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var newsTable: UITableView!
     
+    @IBOutlet weak var buttonsCollection: UICollectionView!
     
     let indicator = NVActivityIndicatorView(frame: CGRect(x: 50, y: 10, width: 100, height: 100),
                                         
         type: NVActivityIndicatorType.ballTrianglePath  ,
         color: UIColor.blue)
     
+    private let suggestionTopics = ["WorldCup" , "Football" , "Cinema",  "Politics" ,"Education" , "Economic" , "Tourism" , "Health"  , "Fashion"]
     
     private var homeVM = HomeViewModel() ///todo: dependency injection
-    private var articles = Array<Article>()
+    
+    
+    private var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         
-
+        self.navigationItem.title = "Home"
         //MARK: delegates
         self.newsTable.delegate = self;
         self.newsTable.dataSource = self;
 
         self.newsTable.keyboardDismissMode = .onDrag
-
+        
+        
+        self.buttonsCollection.delegate = self
+        self.buttonsCollection.dataSource = self
         
         
         self.searchBar.delegate = self
         self.searchBar.endEditing(true)
+        
+        
+        //MARK: setting 1 item in 1 row
+        
+//        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width/4, height:  40)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 4
+        layout.scrollDirection = .horizontal
+
+        buttonsCollection.collectionViewLayout = layout
+        
+        
+        
         //MARK: indicator
         indicator.center = self.view.center
         self.view.addSubview(indicator)
@@ -45,8 +67,7 @@ class HomeViewController: UIViewController  {
         indicator.startAnimating()
 
         //MARK: send api request
-        homeVM.getNews { articles in
-            self.articles = articles;
+        homeVM.getNews { _ in
             self.newsTable.separatorStyle = .none
             self.newsTable.rowHeight = UITableView.automaticDimension
             self.indicator.stopAnimating()
@@ -71,7 +92,6 @@ class HomeViewController: UIViewController  {
 extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
    
     
-    /// get the number from viewmodel
   
 
  
@@ -81,7 +101,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         cell.contentView.layer.masksToBounds = true
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.articles.count;
+        return self.homeVM.newsArticles.count;
     }
     
     
@@ -105,14 +125,14 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         
         
         
-        cell.articlTitle.text = self.articles[indexPath.row].title
+        cell.articlTitle.text = self.homeVM.newsArticles[indexPath.row].title
 
-        cell.auther.text = self.articles[indexPath.row].author
-        cell.desc.text = self.articles[indexPath.row].articleDescription
-        cell.time.text = self.articles[indexPath.row].publishedAt
+        cell.auther.text = self.homeVM.newsArticles[indexPath.row].author
+        cell.desc.text = self.homeVM.newsArticles[indexPath.row].articleDescription
+        cell.time.text = self.homeVM.newsArticles[indexPath.row].publishedAt
         cell.articleImage.image = UIImage(named: "default")
 
-        let imageUrl = URL(string: self.articles[indexPath.row].urlToImage ?? "")
+        let imageUrl = URL(string: self.homeVM.newsArticles[indexPath.row].urlToImage ?? "")
         cell.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
 
         
@@ -131,7 +151,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailsScreen = self.storyboard?.instantiateViewController(identifier: "detailsScreen") as! ViewController
-        detailsScreen.article = self.articles[indexPath.row]
+        detailsScreen.article = self.homeVM.newsArticles[indexPath.row]
         self.navigationController?.pushViewController(detailsScreen, animated: false)
      
     }
@@ -147,16 +167,39 @@ extension HomeViewController : UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchText.isEmpty){
             self.homeVM.getNews{ articles in
-                self.articles = articles;
                 self.newsTable.reloadData();
             }
         }
         else{
             self.homeVM.getSearch(query: searchText) { articles in
-                self.articles = articles;
                 self.newsTable.reloadData();
             }
         }
      
     }
+}
+
+
+extension HomeViewController : UICollectionViewDataSource , UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.suggestionTopics.count
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "buttonCell", for: indexPath) as! CustomButtonCell
+        cell.buttonName.text = self.suggestionTopics[indexPath.row]
+        cell.buttonName.layer.masksToBounds = true
+        cell.buttonName.layer.cornerRadius = 15
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+        self.homeVM.getSearch(query: self.suggestionTopics[indexPath.row]) { _ in
+            
+            self.newsTable.reloadData()
+        }
+    }
+    
+    
 }

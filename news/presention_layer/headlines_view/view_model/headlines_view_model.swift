@@ -24,7 +24,6 @@ class HeadLinesViewModel{
                         complition(newsRequest?.articles ?? Array<Article>());
                         self?.numOfArticles = newsRequest?.totalResults ?? 0;
                         self?.newsArticles = newsRequest?.articles ?? [];
-                        print(self?.numOfArticles)
                     
                     }
                 }

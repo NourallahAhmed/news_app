@@ -15,8 +15,7 @@ class HomeViewModel{
     private var homeUseCase : HomeUseCaseProtocol = HomeUseCase();
     private let queue = DispatchQueue(label: "InternetConnectionMonitor")
     private let monitor = NWPathMonitor()
-    private var numOfArticles = 0;
-    private var newsArticles = Array<Article>();
+    var newsArticles = Array<Article>();
     
     func getNews(complition: @escaping (([Article]) -> Void )) {
         monitor.pathUpdateHandler = { [weak self] pathUpdateHandler  in
@@ -24,11 +23,10 @@ class HomeViewModel{
         DispatchQueue.global().async {
             self?.homeUseCase.getEveryThing { newsRequest in
                 DispatchQueue.main.async{
-                    complition(newsRequest?.articles ?? Array<Article>());
-                    self?.numOfArticles = newsRequest?.totalResults ?? 0;
                     self?.newsArticles = newsRequest?.articles ?? [];
-                    print(self?.numOfArticles)}
-                
+                    
+                    complition(newsRequest?.articles ?? Array<Article>());
+                    }
                 }
             }
         }
@@ -48,8 +46,29 @@ class HomeViewModel{
     
     
     func getSearch(query : String , complition: @escaping (([Article]) -> Void )) {
-        homeUseCase.getSearch(query: query) { newsRequest in
-            complition(newsRequest?.articles ?? Array<Article>());
+        
+        
+        monitor.pathUpdateHandler = { [weak self] pathUpdateHandler  in
+            if pathUpdateHandler.status == .satisfied {
+            DispatchQueue.global().async {
+                self?.homeUseCase.getSearch(query: query) { newsRequest in
+                    self?.newsArticles = newsRequest?.articles ?? [];
+
+                    complition(newsRequest?.articles ?? Array<Article>());
+                }
+                
+                }
+            }
+            else{
+                    DispatchQueue.main.async {
+    //                      self?.homeView.checkNetwork()
+    //                      self?.homeView.stopIndicator()
+                        
+                    }
+                }
+              
         }
+        self.monitor.start(queue: queue)
+
     }
 }
