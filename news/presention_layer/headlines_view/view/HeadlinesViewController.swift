@@ -99,16 +99,16 @@ extension HeadlinesViewController : UICollectionViewDelegate , UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let url = URL(string: self.viewModel.newsArticles[indexPath.row].url ?? "https://www.google.com") {
-        UIApplication.shared.open(url, completionHandler: { success in
-        if success {
-            print("opened")
-        }else {
-            print("failed")
-            // showInvalidUrlAlert()
-            }
-        })
+        guard let url =
+           URL(string: self.viewModel.newsArticles[indexPath.row].url ?? "https://www.google.com")
+        else{
+            return
         }
+        
+        let webView = WebKitViewController(url: url)
+        self.navigationController?.pushViewController(webView, animated: false)
+        
+      
     }
  
 }
