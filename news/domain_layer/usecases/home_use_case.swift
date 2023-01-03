@@ -9,7 +9,6 @@ import Foundation
 
 protocol HomeUseCaseProtocol{
     func getEveryThing(complitionHandler : @escaping (NewsRequest?) -> Void)
-    func getTopHeaders(complitionHandler : @escaping (NewsRequest?) -> Void)
     func getSearch( query :String ,complitionHandler : @escaping (NewsRequest?) -> Void)
 
 }
@@ -25,11 +24,7 @@ class HomeUseCase : HomeUseCaseProtocol{
         }
     }
     
-    func getTopHeaders(complitionHandler: @escaping (NewsRequest?) -> Void) {
-        repo.getTopHeaders { newsRequest in
-            complitionHandler(newsRequest);
-        }
-    }
+   
     
     func getSearch(query: String, complitionHandler: @escaping (NewsRequest?) -> Void) {
         repo.getSearch(query: query) { newsRequest in

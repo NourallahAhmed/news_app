@@ -91,7 +91,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         
         
         
-        cell.backgroundColor = .clear // very important
+        cell.backgroundColor = .clear
         cell.layer.masksToBounds = true
         cell.layer.shadowOpacity = 0.23
         cell.layer.shadowRadius = 4
@@ -106,21 +106,13 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
         
         
         cell.articlTitle.text = self.articles[indexPath.row].title
-        
+
         cell.auther.text = self.articles[indexPath.row].author
         cell.desc.text = self.articles[indexPath.row].articleDescription
         cell.time.text = self.articles[indexPath.row].publishedAt
-
-
-
-        
         cell.articleImage.image = UIImage(named: "default")
-        
-        
+
         let imageUrl = URL(string: self.articles[indexPath.row].urlToImage ?? "")
-        
-        
-        
         cell.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
 
         
@@ -128,17 +120,10 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->CGFloat
     {
 
-//
-//        let heightExpected =
-//            calculateHeight(inString: self.articles[indexPath.row].articleDescription ?? ""  ) +
-//            calculateHeight(inString: self.articles[indexPath.row].title ?? ""  )  +
-//            calculateHeight(inString: self.articles[indexPath.row].author ?? ""  ) +
-//            calculateHeight(inString: self.articles[indexPath.row].source.name  );
         return UITableView.automaticDimension;
-
 
     }
     
@@ -151,19 +136,7 @@ extension HomeViewController : UITableViewDelegate , UITableViewDataSource{
      
     }
     
-    
-//    func calculateHeight(inString:String) -> CGFloat {
-//         let messageString = inString
-//        let attributes : [NSAttributedString.Key  : Any] = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15.0)]
-//
-//         let attributedString : NSAttributedString = NSAttributedString(string: messageString, attributes: attributes)
-//
-//         let rect : CGRect = attributedString.boundingRect(with: CGSize(width: 222.0, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
-//
-//          let requredSize:CGRect = rect
-//          return requredSize.height
-//    }
-    
+
     
 }
             
@@ -179,10 +152,10 @@ extension HomeViewController : UISearchBarDelegate{
             }
         }
         else{
-        self.homeVM.getSearch(query: searchText) { articles in
-            self.articles = articles;
-            self.newsTable.reloadData();
-        }
+            self.homeVM.getSearch(query: searchText) { articles in
+                self.articles = articles;
+                self.newsTable.reloadData();
+            }
         }
      
     }

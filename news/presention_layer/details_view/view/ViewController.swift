@@ -38,17 +38,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.desc.text = self.article?.articleDescription;
-        self.articleTitle.text = self.article?.title;
-        self.articleContent.text = self.article?.content;
-        self.articleImage.image = UIImage(named: "default")
+        
+        self.desc.text = self.article?.articleDescription
+        self.articleTitle.text = self.article?.title
+        self.articleContent.text = self.article?.content
         self.auther.text = self.article?.author
+        self.sourceName.text = self.article?.source.name
+        self.time.text = self.article?.publishedAt
+        
+        
+        self.articleImage.image = UIImage(named: "default")
         let imageUrl = URL(string: self.article?.urlToImage ?? "")
-        
-        
-        articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
-        self.sourceName.text = article?.source.name
-        self.time.text = article?.publishedAt
+        self.articleImage.sd_setImage(with: imageUrl , placeholderImage: UIImage(named: "default"))
 
     }
 
