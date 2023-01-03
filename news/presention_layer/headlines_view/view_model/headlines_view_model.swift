@@ -15,13 +15,13 @@ class HeadLinesViewModel{
     var numOfArticles = 0;
     var newsArticles = Array<Article>();
     
-    func getHeadLines(complition: @escaping (([Article]) -> Void )){
+    func getHeadLines(complition: @escaping (([Article] , _ isConnected : Bool) -> Void )){
         monitor.pathUpdateHandler = { [weak self] pathUpdateHandler  in
         if pathUpdateHandler.status == .satisfied {
             DispatchQueue.global().async {
                 self?.headLinesUseCase.getTopHeaders { newsRequest in
                     DispatchQueue.main.async{
-                        complition(newsRequest?.articles ?? Array<Article>());
+                        complition(newsRequest?.articles ?? Array<Article>() , true);
                         self?.numOfArticles = newsRequest?.totalResults ?? 0;
                         self?.newsArticles = newsRequest?.articles ?? [];
                     
@@ -29,7 +29,8 @@ class HeadLinesViewModel{
                 }
             }
         }else{
-            
+            complition( Array<Article>() , false);
+
             }
         }
         self.monitor.start(queue: queue)

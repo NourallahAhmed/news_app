@@ -9,6 +9,17 @@
 import UIKit
 import NVActivityIndicatorView
 
+
+
+protocol HomeProtocol {
+    func checkNetwork ()
+    func noData ()
+    func showAlert()
+    func handleSearchResult(articles : Array<Article> , isConnected : Bool)
+    func handleGetNewsResult(articles : Array<Article> , isConnected : Bool)
+}
+
+
 class HomeViewController: UIViewController  {
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -207,7 +218,11 @@ extension HomeViewController : UICollectionViewDataSource , UICollectionViewDele
 
 
 //MARK: Helper Functions
-extension HomeViewController {
+
+
+
+
+extension HomeViewController : HomeProtocol {
     func checkNetwork () {
         
         let imageViewBackground = UIImageView()
@@ -259,6 +274,7 @@ extension HomeViewController {
             
             if ( articles.isEmpty){
                 self.noData()
+                self.indicator.stopAnimating()
             }
             else{
                 self.newsTable.separatorStyle = .none

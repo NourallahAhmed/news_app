@@ -9,6 +9,15 @@ import UIKit
 import NVActivityIndicatorView
 
 
+
+protocol HeadLinesProtocol {
+    func checkNetwork ()
+    func noData ()
+    func showAlert()
+    func handleHeadersResult(articles : Array<Article> , isConnected : Bool)
+}
+
+
 class HeadlinesViewController: UIViewController {
 
     
@@ -48,10 +57,9 @@ class HeadlinesViewController: UIViewController {
         self.indicator.startAnimating()
         
         //MARK: fetch data
-        viewModel.getHeadLines { articles in
+        viewModel.getHeadLines { articles  , isConnceted in
             
-            self.indicator.stopAnimating()
-            self.headlinesCollectionView.reloadData()
+            self.handleHeadersResult(articles: articles, isConnected: isConnceted)
         }
         
         
@@ -121,4 +129,59 @@ extension HeadlinesViewController : UICollectionViewDelegate , UICollectionViewD
       
     }
  
+}
+
+extension HeadlinesViewController : HeadLinesProtocol {
+ 
+  
+    
+    
+    
+    func checkNetwork () {
+        
+        let imageViewBackground = UIImageView()
+        imageViewBackground.image = UIImage(named: "offline")
+        imageViewBackground.contentMode = UIView.ContentMode.scaleAspectFit
+        self.headlinesCollectionView.backgroundView = imageViewBackground
+        self.headlinesCollectionView.reloadData()
+        self.showAlert()
+
+       }
+    
+    
+    func noData () {
+        
+        let imageViewBackground = UIImageView()
+        imageViewBackground.image = UIImage(named: "nodata")
+        imageViewBackground.contentMode = UIView.ContentMode.scaleAspectFit
+        self.headlinesCollectionView.backgroundView = imageViewBackground
+        self.headlinesCollectionView.reloadData()
+
+       }
+    func showAlert(){
+        DispatchQueue.main.async {
+            let alert : UIAlertController = UIAlertController(title: "ERROR", message: "Please check your internet connection", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: nil))
+            self.present(alert , animated: true , completion: nil)
+            
+        }
+        
+    }
+    
+    func handleHeadersResult(articles: Array<Article>, isConnected: Bool) {
+        if(isConnected == true){
+            if(articles.isEmpty){
+                self.indicator.stopAnimating()
+                self.noData()
+            }
+            else{
+                self.indicator.stopAnimating()
+                self.headlinesCollectionView.reloadData();
+            }
+        }else{
+            self.indicator.stopAnimating()
+            self.checkNetwork()
+        }
+    }
+    
 }
