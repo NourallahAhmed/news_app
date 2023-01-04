@@ -17,9 +17,19 @@ and the third screen shows the highlights news.
  - Clean Architecture
  
 # Screens 
-  
-
-    <img src="https://user-images.githubusercontent.com/87453033/210621773-e8811d47-3af4-4dd7-afe5-b8249478a5e3.png" width="243" height="528"> 
 
 
-    <img src="https://user-images.githubusercontent.com/87453033/210621773-e8811d47-3af4-4dd7-afe5-b8249478a5e3.png" width="243" height="528"> 
+ <img src="https://user-images.githubusercontent.com/87453033/210622830-d4de9dd7-94cf-41dc-950d-9cb089bf548a.png" width="243" height="528"> 
+
+
+ <img src="https://user-images.githubusercontent.com/87453033/210622942-093a942f-1d24-4f13-85ab-f60fcbb3fbd2.png" width="243" height="528"> 
+
+
+ <img src="https://user-images.githubusercontent.com/87453033/210622989-6def9646-f06b-4cfa-ac10-460e252279ff.png" width="243" height="528"> 
+
+
+ <img src="https://user-images.githubusercontent.com/87453033/210623101-c4e8d271-c6a9-4dc3-8f25-f79e75ce7502.png" width="243" height="528"> 
+
+
+ <img src="https://user-images.githubusercontent.com/87453033/210623227-0b30ea86-fec8-47b8-8be7-c511fc14d6fc.png" width="243" height="528"> 
+
