@@ -1,8 +1,6 @@
 # news_app
-It is IOS application connected by news API, the application consist of 3 screens the first is the home screen shows the news
-and the user can search for any topic also the application suggest some topic for search, second screen shows the deatils for any new the user picked from home screen 
-and the third screen shows the highlights news.
-
+It is IOS application connected by news API, the application consist of 3 screens; the first is the home screen shows the news
+where user can search for any topic in addition to the application search suggestions. The second screen is for the deatils of news, it is connected with news in home page when the user picked one of them, he directed to the details. The last screen shows the highlights news when the user picked one of them, he directed to the source URL for the headline news.
 
 # Featuers
  - Home screen
